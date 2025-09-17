@@ -2,7 +2,7 @@ import {  Button, Card, Checkbox, Flex, Image, Link, Field, Input, Stack, Box } 
 import { PasswordInput } from "@/components/ui/password-input"
 import BtnGoogle from "@/components/ui/btnGoogle"
 
-export const CardWithForm = () => (
+export const Login = () => (
   <Flex  minH="100vh" 
     align="center" 
     justify="center" 
@@ -54,4 +54,4 @@ export const CardWithForm = () => (
   
 )
 
-export default CardWithForm
+export default Login
