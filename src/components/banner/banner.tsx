@@ -1,4 +1,4 @@
-import { Button, Heading, Stack, Text } from "@chakra-ui/react"
+import { Button, Heading, Image, Stack, Text } from "@chakra-ui/react"
 import { LuArrowRight } from "react-icons/lu"
 import Link from "next/link"
 
@@ -10,7 +10,8 @@ const Banner = () => {
         Experience Innovation
       </Text>
       <Link href="/login" passHref>
-        <Button as="a" background="blue" borderRadius="22px">
+        <image src="src/assets/bannerImage.svg" />
+        <Button background="blue" borderRadius="22px">
           SHOP NOW <LuArrowRight />
         </Button>
       </Link>

@@ -34,7 +34,7 @@ export const Login = () => (
     </Card.Body>
     <Checkbox.Root>
       <Checkbox.HiddenInput  />
-      <BtnGoogle></BtnGoogle>
+      
       <Checkbox.Control />
       <Checkbox.Label gap="2" >
         Remember-me{" "}
@@ -47,6 +47,7 @@ export const Login = () => (
     <Card.Footer borderRadius="50%" justifyContent="center">
       
       <Button variant="solid" background="blue"  >Login</Button>
+      <BtnGoogle></BtnGoogle>
     </Card.Footer>
     
   </Card.Root>
