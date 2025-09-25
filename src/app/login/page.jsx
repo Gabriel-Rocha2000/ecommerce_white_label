@@ -1,8 +1,18 @@
-import {  Button, Card, Checkbox, Flex, Image, Link, Field, Input, Stack, Box } from "@chakra-ui/react"
+"use client"
+import {  Button, Card, Checkbox, Flex, Image, Link, Field, Input, Stack } from "@chakra-ui/react"
 import { PasswordInput } from "@/components/ui/password-input"
 import BtnGoogle from "@/components/ui/btnGoogle"
+import { useEffect } from "react"
+import useStore from "@/components/globaState/store"
 
-export const Login = () => (
+export const Login = () => {
+  
+  const {user} = useStore()
+  useEffect(() => {
+  console.log("Usuário atual:", user)
+  }, [user])
+
+  return (
   <Flex  minH="100vh" 
     align="center" 
     justify="center" 
@@ -54,5 +64,5 @@ export const Login = () => (
   </Flex>
   
 )
-
+}
 export default Login
