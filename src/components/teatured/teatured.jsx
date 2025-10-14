@@ -3,24 +3,30 @@ import { Box, Grid, GridItem, Heading, Image, Text } from "@chakra-ui/react";
 const Category = () => {
   const categories = [
   {  "id": 1, 
-       "name": "Electronics",
-       "image": "/ph.svg" },
+       "name": "EAquaPhone X2",
+       "image": "/phone.svg", 
+        "price": "$299"
+      },
     { "id": 2, 
-      "name": "Smart Home Wearables", 
-      "image": "/hp.svg" },
+      "name": "SCloudPods Pro", 
+      "image": "/hset.svg" ,
+      "price": "$199"
+    },
   { "id": 3,
-     "name": "Audio Gaming", 
-     "image": "/ct.svg" },
+     "name": "AChronoWatch Eiite", 
+     "image": "/watch.svg" ,
+     "price": "$99"
+    },
     {"id": 4,
-       "name": "Camess Accessories",
-        "image": "/acs.svg" },
+       "name": "CSoundSphere Go",
+        "image": "/sound.svg" },
   ];
 
   return (
     <Box maxW="85%" mx="auto" mt="8" textAlign="start">
      
-      <Heading as="h1" fontSize="50" mb="6" color="gray.700">
-        CATEGORY GRID
+      <Heading as="h1" fontSize="13" mb="6" color="gray.700">
+        TEATURED PRODUCTS
       </Heading>
 
       <Grid
@@ -59,6 +65,7 @@ const Category = () => {
               />
               <Text mt="3" fontWeight="500">
                 {e.name}
+                {e.price ? ` - ${e.price}` : ''}
               </Text>
             </Box>
           </GridItem>

@@ -3,31 +3,23 @@ import { doc, getDoc, getFirestore } from "firebase/firestore";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-
-
+let isLoadingUserData = false; 
 
 const getUser = async (set) => {
-  const auth = getAuth();   
+  const auth = getAuth();
+
+  
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      set(state => ({ user: user }))
-      set(state => ({ loadingLogin: true }))
-
-
-      
-
+      set({ user, loadingLogin: true });
     } else {
-      set(state => ({ loadingLogin: false }))
+      set({ user: null, loadingLogin: false });
     }
   });
-}
+};
 
 const getUserData = async (set) => {
-  // Evita múltiplas chamadas simultâneas
-  if (isLoadingUserData) {
-    console.log('getUserData já está em execução, pulando...');
-    return;
-  }
+  if (isLoadingUserData) return;
 
   const auth = getAuth();
   const db = getFirestore();
@@ -35,43 +27,42 @@ const getUserData = async (set) => {
   try {
     isLoadingUserData = true;
     const user = auth.currentUser;
+
     if (user) {
-      // Busca os dados do usuári
       const userDocRef = doc(db, "users", user.uid);
       const userDocSnap = await getDoc(userDocRef);
 
       if (userDocSnap.exists()) {
-        const firestoreData = userDocSnap.data();
-        set(state => ({ userData: firestoreData }));
+        set({ userData: userDocSnap.data() });
       } else {
-        console.log("Nenhum dado encontrado no Firestore para este usuário");
-        set(state => ({ userData: null }));
+        set({ userData: null });
       }
     }
   } catch (error) {
     console.error("Erro ao buscar dados do usuário:", error);
-    set(state => ({ userData: null }));
+    set({ userData: null });
   } finally {
     isLoadingUserData = false;
   }
 };
-  
 
 const useStore = create(
   persist(
     (set, get) => ({
-     user: null,
+      user: null,
       userData: null,
+      loadingLogin: false,
       getUser: () => getUser(set),
       getUserData: () => getUserData(set),
-     
     }),
     {
-      name: 'user-storage', // unique name for localStorage key
-      partialize: (state) => ({ userData: state.userData }), // persist userData and pagamentoSubscription
+      name: "user-storage",
+      partialize: (state) => ({
+        user: state.user,
+        userData: state.userData,
+      }),
     }
   )
 );
-
 
 export default useStore;

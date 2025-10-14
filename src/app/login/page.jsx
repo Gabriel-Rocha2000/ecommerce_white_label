@@ -1,17 +1,19 @@
 "use client"
-import {  Button, Card, Checkbox, Flex, Image, Link, Field, Input, Stack } from "@chakra-ui/react"
+import {  Button, Card, Checkbox, Flex, Image, Link, Field, Input, Stack, useEmptyStateStyles } from "@chakra-ui/react"
 import { PasswordInput } from "@/components/ui/password-input"
 import BtnGoogle from "@/components/ui/btnGoogle"
-import { useEffect } from "react"
+import { useEffect, useState, } from "react"
 import useStore from "@/components/globaState/store"
+
 
 export const Login = () => {
   
-  const {user} = useStore()
+  const { user, getUser } = useStore();
   useEffect(() => {
+    if (user) {
   console.log("Usuário atual:", user)
-  }, [user])
-
+  }}, [user])
+  
   return (
   <Flex  minH="100vh" 
     align="center" 
@@ -56,7 +58,7 @@ export const Login = () => {
     </Checkbox.Root>
     <Card.Footer borderRadius="50%" justifyContent="center">
       
-      <Button variant="solid" background="blue"  >Login</Button>
+      
       <BtnGoogle></BtnGoogle>
     </Card.Footer>
     

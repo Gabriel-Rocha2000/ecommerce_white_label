@@ -1,4 +1,10 @@
-const createUser = async () => {
+
+import { doc, setDoc, getDoc, getFirestore } from "firebase/firestore";
+import { app } from "../fireBaseInit/fireBaseinit";
+
+const db = getFirestore(app);
+
+ export const createUser = async (user, getUserData, router) => {
   try {
     const userRef = doc(db, 'users', user.uid);
     const userSnap = await getDoc(userRef);
@@ -27,10 +33,11 @@ const createUser = async () => {
       produtos: [],
     });
 
+    await setDoc(userRef, newUser);
     console.log("Usuário criado com sucesso no Firestore");
-    await getUserData();
-    router.push('/');
+    return newUser; 
   } catch (error) {
     console.error("Erro ao criar/atualizar usuário no Firestore:", error);
+    throw error;
   }
 };

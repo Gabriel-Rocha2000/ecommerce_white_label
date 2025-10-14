@@ -2,8 +2,10 @@ import type { NextConfig } from "next";
 
 
 export default {
-  experimental: {
+  experimental: { 
+    
     optimizePackageImports: ["@chakra-ui/react"],
-  },
+  }, 
+  
 }
   

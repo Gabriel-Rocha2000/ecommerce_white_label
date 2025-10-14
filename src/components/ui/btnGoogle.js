@@ -5,15 +5,14 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import React, { useState, useEffect } from "react";
-import { getApps, initializeApp } from "firebase/app";
-import { doc, setDoc, getFirestore } from "firebase/firestore";
+
 import { Button } from "@chakra-ui/react";
 import { Box, Flex } from "@chakra-ui/react";
 import { getIdTokenResult } from "firebase/auth/web-extension";
 
 import { app} from "../fireBaseInit/fireBaseinit";
 import { useRouter } from "next/navigation";
-// import { useRouter } from "next/router";
+
 
 
 
@@ -21,7 +20,7 @@ export default function BtnGoogle() {
 
   const auth = getAuth(app);
   const router = useRouter();
-
+  
  
 
   async function loginGoogle() {
@@ -35,6 +34,8 @@ export default function BtnGoogle() {
         const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
+        console.log(user)
+       
 
         router.push("/");
         // IdP data available using getAdditionalUserInfo(result)
