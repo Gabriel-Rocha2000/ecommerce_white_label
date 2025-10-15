@@ -4,7 +4,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import { Button } from "@chakra-ui/react";
 import { Box, Flex } from "@chakra-ui/react";
@@ -12,6 +12,7 @@ import { getIdTokenResult } from "firebase/auth/web-extension";
 
 import { app} from "../fireBaseInit/fireBaseinit";
 import { useRouter } from "next/navigation";
+import useStore from "@/components/globaState/store";
 
 
 
@@ -20,6 +21,7 @@ export default function BtnGoogle() {
 
   const auth = getAuth(app);
   const router = useRouter();
+  const getUser = useStore(state => state.getUser);
   
  
 
@@ -34,9 +36,12 @@ export default function BtnGoogle() {
         const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
-        console.log(user)
-       
-
+ 
+        console.log("CHAMOU LOGOUU", user)
+        
+        // Chama a função getUser para atualizar o estado global
+        getUser();
+        
         router.push("/");
         // IdP data available using getAdditionalUserInfo(result)
         // ...

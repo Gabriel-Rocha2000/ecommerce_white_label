@@ -4,16 +4,68 @@ import { PasswordInput } from "@/components/ui/password-input"
 import BtnGoogle from "@/components/ui/btnGoogle"
 import { useEffect, useState, } from "react"
 import useStore from "@/components/globaState/store"
-
+import { useRouter } from "next/navigation";
+import { doc, getDoc, setDoc, getFirestore } from "firebase/firestore";
 
 export const Login = () => {
   
-  const { user, getUser } = useStore();
+  const { user} = useStore();
+  const getUserData = useStore(state => state.getUserData)
+  const router = useRouter();
+  const db = getFirestore();
+
   useEffect(() => {
-    if (user) {
-  console.log("Usuário atual:", user)
-  }}, [user])
-  
+    console.log("user efetc passei", user);
+  }, [user]);
+
+  useEffect(() => {
+    if (user?.uid) {
+      console.log("CHAMOU CREATE USER", user)
+      // Adiciona um pequeno delay para garantir que o Firestore esteja conectado
+      setTimeout(() => {
+        createUser();
+      }, 1000);
+    }
+  }, [user]);
+
+const createUser = async () => {
+  try {
+    // Verifica se o Firestore está conectado
+    if (!db) {
+      console.error("Firestore não está inicializado");
+      return;
+    }
+    
+    const userRef = doc(db, 'users', user.uid);
+    const userSnap = await getDoc(userRef);
+
+    if (userSnap.exists()) {
+      await getUserData();
+      console.log("Usuário já existe, dados carregados.");
+      router.push('/');
+      return;
+    }
+
+    
+    await setDoc(userRef, {
+      uid: user.uid,
+      email: user.email,
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+      
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    
+      produtos: [],
+    });
+
+    console.log("Usuário criado com sucesso no Firestore");
+    await getUserData();
+    router.push('/');
+  } catch (error) {
+    console.error("Erro ao criar/atualizar usuário no Firestore:", error);
+  }
+};
   return (
   <Flex  minH="100vh" 
     align="center" 
