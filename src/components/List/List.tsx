@@ -7,12 +7,19 @@ import {
   Listbox,
   Text,
   createListCollection,
+  Input,
+  Button,
 } from "@chakra-ui/react"
-import { useState } from "react"
+import { useState, useMemo } from "react"
+import { useProducts } from "@/context/ProductsContext"
 
 
 const List = () => {
   const [selectedImage, setSelectedImage] = useState<string>("smartphones")
+  const [editingItem, setEditingItem] = useState<string | null>(null)
+  const [editedLabel, setEditedLabel] = useState<string>("")
+  const [editedDescription, setEditedDescription] = useState<string>("")
+  const { items, updateItem } = useProducts()
 
   const handleSelectionChange = (details: any) => {
     if (details.value.length > 0) {
@@ -20,22 +27,99 @@ const List = () => {
     }
   }
 
-  const currentImage = images.items.find((img) => img.value === selectedImage)
+  const handleItemClick = (itemValue: string) => {
+    const item = items.find((img) => img.value === itemValue)
+    if (item) {
+      setEditingItem(itemValue)
+      setEditedLabel(item.label)
+      setEditedDescription(item.description)
+    }
+  }
+
+  const handleSaveEdit = () => {
+    if (editingItem) {
+      updateItem(editingItem, {
+        label: editedLabel,
+        description: editedDescription,
+      })
+      setEditingItem(null)
+    }
+  }
+
+  const handleCancelEdit = () => {
+    setEditingItem(null)
+    setEditedLabel("")
+    setEditedDescription("")
+  }
+
+  const currentImage = items.find((img) => img.value === selectedImage)
+
+  const dynamicCollection = useMemo(() => {
+    return createListCollection({ items })
+  }, [items])
 
   return (
     <Flex gap="6" maxW="800px">
       <Listbox.Root
         maxW="3sxs"
-        collection={images}
+        collection={dynamicCollection}
         value={[selectedImage]}
         onValueChange={handleSelectionChange}
         variant="solid"
       >
         <Listbox.Content border="0">
-          {images.items.map((image) => (
-            <Listbox.Item item={image} key={image.value}>
-              <Listbox.ItemText>{image.label}</Listbox.ItemText>
-              <Listbox.ItemIndicator />
+          {items.map((image) => (
+            <Listbox.Item 
+              item={image} 
+              key={image.value}
+              onClick={() => handleItemClick(image.value)}
+              cursor="pointer"
+            >
+              {editingItem === image.value ? (
+                <Box width="100%" p="2">
+                  <Input
+                    value={editedLabel}
+                    onChange={(e) => setEditedLabel(e.target.value)}
+                    size="sm"
+                    mb="2"
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                  <Input
+                    value={editedDescription}
+                    onChange={(e) => setEditedDescription(e.target.value)}
+                    size="sm"
+                    mb="2"
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                  <Flex gap="2">
+                    <Button
+                      size="xs"
+                      colorScheme="green"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleSaveEdit()
+                      }}
+                    >
+                      Salvar
+                    </Button>
+                    <Button
+                      size="xs"
+                      variant="outline"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleCancelEdit()
+                      }}
+                    >
+                      Cancelar
+                    </Button>
+                  </Flex>
+                </Box>
+              ) : (
+                <>
+                  <Listbox.ItemText>{image.label}</Listbox.ItemText>
+                  <Listbox.ItemIndicator />
+                </>
+              )}
             </Listbox.Item>
           ))}
         </Listbox.Content>
@@ -65,44 +149,6 @@ const List = () => {
   )
 }
 
-const images = createListCollection({
-  items: [
-    {
-      label: "SMARTPHONE BRANCO",
-      value: "Smartphones",
-      description: "R$3499,99",
-      url: "https://images.unsplash.com/photo-1634403665481-74948d815f03?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=387",
-    },
-    {
-      label: "SMARTWATCH PRETO",
-      value: "SMARTWATCH",
-      description: "R$499,99",
-      url: "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=872",
-    },
-    {
-      label: "HEADPHONE CINZA ESCURO",
-      value: "forest",
-      description: "R$399,99",
-      url: "https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=388",
-    },
-    {
-      label: "KIT MOUSE/TECLADO BRANCOS",
-      value: "city",
-      description: "R$249,90",
-      url: "https://plus.unsplash.com/premium_photo-1683543124615-fb42e42c6201?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=871",
-    },
-    {
-      label: "CONSOLE VIDEOGAME COMPLETO",
-      value: "desert",
-      description: "R$3999,99",
-      url: "https://images.unsplash.com/photo-1621259182978-fbf93132d53d?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1032",
-    },
-    {
-      label: "JOYSTICKS VARIADOS COLORIDOS",
-      value: "deserty",
-      description: "R$549,90",
-      url: "https://images.unsplash.com/photo-1632312527375-bd5d5a0d3484?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=387",
-    },
-  ],
-})
 export default List
+
+

@@ -1,7 +1,6 @@
-// src/components/criar/ProductForm.jsx
 "use client"
 import { useState } from "react"
-import { Button, Field, Fieldset, For, Input, NativeSelect } from "@chakra-ui/react"
+import { Button, Field, Fieldset, For, Input, NativeSelect, Box } from "@chakra-ui/react"
 import { FaImage } from "react-icons/fa"
 import { useProducts } from "@/context/ProductsContext"
 
@@ -96,9 +95,15 @@ export const ProductForm = ({ onCancel, onSave }) => {
         </Field.Root>
       </Fieldset.Content>
 
-      <Button type="submit" alignSelf="flex-start" onClick={handleSave}>
-        Cadastrar
-      </Button>
+      <Box display="flex" gap="2" mt="4">
+        <Button variant="outline" onClick={handleCancel}>
+          Cancelar
+        </Button>
+        <Button onClick={handleSave}>
+          Salvar
+        </Button>
+      </Box>
     </Fieldset.Root>
   )
 }
+

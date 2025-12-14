@@ -1,0 +1,87 @@
+"use client"
+
+import { createContext, useContext, useState, ReactNode } from "react"
+
+export interface ProductItem {
+  label: string
+  value: string
+  description: string
+  url: string
+}
+
+interface ProductsContextType {
+  items: ProductItem[]
+  addItem: (item: ProductItem) => void
+  updateItem: (value: string, updatedItem: Partial<ProductItem>) => void
+}
+
+const ProductsContext = createContext<ProductsContextType | undefined>(undefined)
+
+const initialItems: ProductItem[] = [
+  {
+    label: "SMARTPHONE BRANCO",
+    value: "Smartphones",
+    description: "R$3499,99",
+    url: "https://images.unsplash.com/photo-1634403665481-74948d815f03?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=387",
+  },
+  {
+    label: "SMARTWATCH PRETO",
+    value: "SMARTWATCH",
+    description: "R$499,99",
+    url: "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=872",
+  },
+  {
+    label: "HEADPHONE CINZA ESCURO",
+    value: "forest",
+    description: "R$399,99",
+    url: "https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=388",
+  },
+  {
+    label: "KIT MOUSE/TECLADO BRANCOS",
+    value: "city",
+    description: "R$249,90",
+    url: "https://plus.unsplash.com/premium_photo-1683543124615-fb42e42c6201?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=871",
+  },
+  {
+    label: "CONSOLE VIDEOGAME COMPLETO",
+    value: "desert",
+    description: "R$3999,99",
+    url: "https://images.unsplash.com/photo-1621259182978-fbf93132d53d?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1032",
+  },
+  {
+    label: "JOYSTICKS VARIADOS COLORIDOS",
+    value: "deserty",
+    description: "R$549,90",
+    url: "https://images.unsplash.com/photo-1632312527375-bd5d5a0d3484?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=387",
+  },
+]
+
+export const ProductsProvider = ({ children }: { children: ReactNode }) => {
+  const [items, setItems] = useState<ProductItem[]>(initialItems)
+
+  const addItem = (item: ProductItem) => {
+    setItems((prevItems) => [...prevItems, item])
+  }
+
+  const updateItem = (value: string, updatedItem: Partial<ProductItem>) => {
+    setItems((prevItems) =>
+      prevItems.map((item) =>
+        item.value === value ? { ...item, ...updatedItem } : item
+      )
+    )
+  }
+
+  return (
+    <ProductsContext.Provider value={{ items, addItem, updateItem }}>
+      {children}
+    </ProductsContext.Provider>
+  )
+}
+
+export const useProducts = () => {
+  const context = useContext(ProductsContext)
+  if (context === undefined) {
+    throw new Error("useProducts must be used within a ProductsProvider")
+  }
+  return context
+}
