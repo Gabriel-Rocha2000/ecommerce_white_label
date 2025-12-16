@@ -11,7 +11,7 @@ const data = [
 
 const Grafico = () => {
   return (
-    <div style={{ width: "100%", height: 320, padding: "10px" }}>
+    <div style={{ width: "50%", height: 320, padding: "10px" }}>
       <ResponsiveContainer>
         <BarChart data={data} barSize={40}>
           <CartesianGrid stroke="#E2E8F0" vertical={false} />
@@ -32,6 +32,8 @@ const Grafico = () => {
         </BarChart>
       </ResponsiveContainer>
     </div>
+    
+    
   )
 }
 export default Grafico
