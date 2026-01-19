@@ -1,7 +1,7 @@
 "use client"
 import { useState } from "react"
 import { Flex,  Box, Text, Button, HStack, Stack, VStack, Heading } from "@chakra-ui/react"
-import List from "@/components/List/List"
+import List from "@/components/List"
 import Grafico from "@/components/grafico/grafico"
 import { ProductsProvider } from "@/context/ProductsContext"
 import {Tabs } from "@chakra-ui/react"
@@ -10,29 +10,31 @@ import { ProductForm } from "@/components/criar/ProductForm"
 
 const DashProdutos = () => {
   const [activeTab, setActiveTab] = useState("products")
+  const [editingProduct, setEditingProduct] = useState(null)
 
-  const handleCreateClick = () => {
-    setActiveTab("items")
+  const handleEditProduct = (product) => {
+    setEditingProduct(product)
+    setActiveTab("members")
   }
 
   const handleFormSave = () => {
     setActiveTab("products")
+    setEditingProduct(null)
   }
 
   const handleFormCancel = () => {
     setActiveTab("products")
+    setEditingProduct(null)
   }
   return (
     <ProductsProvider>
-      <>
-        
-          
-        <Flex justify="start" align="center" mt={6} mb={6}>
-         <Tabs.Root value={activeTab} onValueChange={(e) => setActiveTab(e.value)}>
+      <Box>
+        <Flex justify="start" align="center" mb={6}>
+          <Tabs.Root value={activeTab} onValueChange={(e) => setActiveTab(e.value)}>
                 <Tabs.List
                   display="flex"
                   gap="2"
-                  mb="4"
+                  mb="6"
                   borderBottom="none"
                 >
                   <Tabs.Trigger 
@@ -102,47 +104,64 @@ const DashProdutos = () => {
                 </Tabs.List>
 
                 <Tabs.Content value="products">
-                  <Box display="flex" alignItems="center" justifyContent="space-between" mb={4}>
+                  <Box display="flex" alignItems="center" justifyContent="space-between" mb={6}>
                     <Text
                       as="h2"
-                      fontSize="2xl"
-                      color="gray.700"
+                      fontSize="xl"
+                      color="gray.800"
                       fontWeight="semibold"
                     >
                       Produtos Cadastrados
                     </Text>
-                    
                   </Box>
 
                   <Box
-                    maxH="300px"
+                    maxH="500px"
                     overflowY="auto"
                     pr={2}
+                    borderRadius="md"
                     sx={{
-                      "&::-webkit-scrollbar": { width: "6px" },
-                      "&::-webkit-scrollbar-track": { background: "#f1f1f1" },
-                      "&::-webkit-scrollbar-thumb": { background: "#c1c1c1", borderRadius: "4px" }
+                      "&::-webkit-scrollbar": { width: "8px" },
+                      "&::-webkit-scrollbar-track": { background: "gray.100", borderRadius: "4px" },
+                      "&::-webkit-scrollbar-thumb": { 
+                        background: "gray.400", 
+                        borderRadius: "4px",
+                        "&:hover": { background: "gray.500" }
+                      }
                     }}
                   >
-                    <List />
+                    <List onEditProduct={handleEditProduct} />
                   </Box>
                 </Tabs.Content>
 
                 <Tabs.Content value="members">
                   <Box>
-                    <Text fontSize="xl" fontWeight="semibold" mb={4}>
-                      Cadastro de Produtos
+                    <Text 
+                      fontSize="xl" 
+                      fontWeight="semibold" 
+                      mb={6}
+                      color="gray.800"
+                    >
+                      {editingProduct ? "Editar Produto" : "Cadastro de Produtos"}
                     </Text>
-                    <ProductForm onSave={handleFormSave} onCancel={handleFormCancel} />
+                    <Box
+                      bg="gray.50"
+                      borderRadius="lg"
+                      p={6}
+                      border="1px solid"
+                      borderColor="gray.200"
+                    >
+                      <ProductForm 
+                        onSave={handleFormSave} 
+                        onCancel={handleFormCancel}
+                        editingProduct={editingProduct}
+                      />
+                    </Box>
                   </Box>
                 </Tabs.Content>
               </Tabs.Root> 
-        
-          
-
-         
         </Flex>
-      </>
+      </Box>
     </ProductsProvider>
   )
 

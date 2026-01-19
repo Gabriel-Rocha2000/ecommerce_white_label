@@ -1,45 +1,51 @@
 "use client"
 
-import { Button, Flex, Image } from "@chakra-ui/react";
+import { Button, Flex, Image, Box, HStack } from "@chakra-ui/react";
 import Link from "next/link"; 
 import BtnLogout from "../BtnLogout/BtnLogout";
-import Criar from "../criar/criar";
 
 const Header = () => {
   return (
-    <Flex gap="4" justify="space-between" padding="0">
-      <Image
-        src="./icon.svg"
-        alignItems="center"
-        width="19px"
-        height="18px"
-        marginTop="18px"
-        marginLeft="18px"
-        _hover={{
-          boxShadow: "md",
-          transform: "scale(1.05)",
-          transition: "all 0.3s ease-in-out",
-        }}
-      />
+    <Flex 
+      gap="4" 
+      justify="space-between" 
+      align="center"
+      w="100%"
+    >
+      <Box>
+        <Image
+          src="./icon.svg"
+          alt="Logo"
+          width="32px"
+          height="32px"
+          _hover={{
+            boxShadow: "md",
+            transform: "scale(1.05)",
+            transition: "all 0.3s ease-in-out",
+            cursor: "pointer"
+          }}
+        />
+      </Box>
 
-      <Flex gap="4" padding="2" justify="flex-start" marginRight="25px">
-
-        
+      <HStack gap={3} align="center">
         <Link href="/dashboard">
           <Button
-            background="white"
-            border="1px solid"
-            color="black"
-            borderRadius="9px"
             variant="outline"
             size="sm"
+            colorScheme="gray"
+            borderRadius="md"
+            _hover={{
+              bg: "gray.50",
+              transform: "translateY(-1px)",
+              boxShadow: "sm"
+            }}
           >
             Home
           </Button>
         </Link>
 
         <BtnLogout />
-      </Flex>
+      </HStack>
     </Flex>
   );
 };

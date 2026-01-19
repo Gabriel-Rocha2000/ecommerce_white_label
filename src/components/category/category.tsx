@@ -1,66 +1,90 @@
-import { Box, Grid, GridItem, Heading, Image, Text } from "@chakra-ui/react";
+import { Box, Grid, GridItem, Heading, Image, Text, Card } from "@chakra-ui/react";
 
 const Category = () => {
   const categories = [
-  {  "id": 1, 
-       "name": "Electronics",
-       "image": "/ph.svg" },
-    { "id": 2, 
-      "name": "Smart Home Wearables", 
-      "image": "/hp.svg" },
-  { "id": 3,
-     "name": "Audio Gaming", 
-     "image": "/ct.svg" },
-    {"id": 4,
-       "name": "Camess Accessories",
-        "image": "/acs.svg" },
+    { 
+      id: 1, 
+      name: "Electronics",
+      image: "/ph.svg" 
+    },
+    { 
+      id: 2, 
+      name: "Smart Home Wearables", 
+      image: "/hp.svg" 
+    },
+    { 
+      id: 3,
+      name: "Audio Gaming", 
+      image: "/ct.svg" 
+    },
+    {
+      id: 4,
+      name: "Camess Accessories",
+      image: "/acs.svg" 
+    },
   ];
 
   return (
-    <Box maxW="85%" mx="auto" mt="8" textAlign="start">
-     
-      <Heading as="h1" fontSize="50" mb="6" color="gray.700">
-        CATEGORY GRID
+    <Box>
+      <Heading 
+        as="h2" 
+        size={{ base: "lg", md: "xl" }} 
+        mb={8} 
+        color="gray.800"
+        fontWeight="bold"
+        textAlign="center"
+      >
+        CATEGORIAS
       </Heading>
 
       <Grid
-        templateColumns="repeat(4, 1fr)"
-        gap="8"
-        p="4"
-        bg="#FEFEFE"
-        borderRadius="md"
+        templateColumns={{ 
+          base: "1fr", 
+          sm: "repeat(2, 1fr)", 
+          lg: "repeat(4, 1fr)" 
+        }}
+        gap={6}
       >
-        {categories.map((e) => (
-          <GridItem
-            key={e.id}
-            border="1px solid #E2E8F0"
-            p="4"
-            textAlign="center"
-            _hover={{
-              boxShadow: "md",
-              transform: "scale(1.05)",
-              transition: "all 0.3s ease-in-out",
-            }}
-          >
-            <Box
-              display="flex"
-              flexDirection="column"
-              alignItems="center"
-              justifyContent="center"
-              textAlign="center"
+        {categories.map((category) => (
+          <GridItem key={category.id}>
+            <Card.Root
+              variant="outline"
+              _hover={{
+                boxShadow: "lg",
+                transform: "translateY(-4px)",
+                transition: "all 0.3s ease-in-out",
+                borderColor: "blue.300"
+              }}
+              cursor="pointer"
             >
-              <Image
-                rounded="sm"
-                h="200px"
-                w="300px"
-                fit="contain"
-                src={e.image}
-                alt={e.name}
-              />
-              <Text mt="3" fontWeight="500">
-                {e.name}
-              </Text>
-            </Box>
+              <Card.Body>
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  alignItems="center"
+                  justifyContent="center"
+                  textAlign="center"
+                  py={4}
+                >
+                  <Image
+                    rounded="md"
+                    h={{ base: "150px", md: "180px" }}
+                    w="100%"
+                    fit="contain"
+                    src={category.image}
+                    alt={category.name}
+                    mb={4}
+                  />
+                  <Text 
+                    fontWeight="semibold" 
+                    fontSize="md"
+                    color="gray.700"
+                  >
+                    {category.name}
+                  </Text>
+                </Box>
+              </Card.Body>
+            </Card.Root>
           </GridItem>
         ))}
       </Grid>
